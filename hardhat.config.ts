@@ -30,7 +30,9 @@ export default {
     // Your API key for Etherscan
     // Obtain one at https://bscscan.com/
     apiKey: {
-      bsc:"VNEXV6DNI5UZFB73RNDB43WE7W6145KNX8"
+      bsc:"VNEXV6DNI5UZFB73RNDB43WE7W6145KNX8",
+      mainnet: "IEQY4RUYYAEJCSQMKC97T5233MTF38J2YZ",
+      ropsten: "IEQY4RUYYAEJCSQMKC97T5233MTF38J2YZ"
     }
   },
 };

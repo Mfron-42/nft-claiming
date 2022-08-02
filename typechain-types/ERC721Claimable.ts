@@ -24,26 +24,35 @@ export interface ERC721ClaimableInterface extends utils.Interface {
     "balanceOf(address)": FunctionFragment;
     "baseURI()": FunctionFragment;
     "claim()": FunctionFragment;
-    "claimPrice()": FunctionFragment;
-    "claimers(address)": FunctionFragment;
+    "claimBatch(uint16)": FunctionFragment;
+    "claimReserved(uint256,uint256)": FunctionFragment;
+    "endMintBlock()": FunctionFragment;
+    "endPrice()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mintBatch(uint256)": FunctionFragment;
+    "maxPremint()": FunctionFragment;
+    "merkleRoot()": FunctionFragment;
     "name()": FunctionFragment;
-    "nextClaim()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
+    "preClaim(bytes32[])": FunctionFragment;
+    "premintEndBlock()": FunctionFragment;
+    "premintPrice()": FunctionFragment;
+    "premintStartBlock()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "reservedAmount()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
-    "saleOffers(uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "setBaseURI(string)": FunctionFragment;
-    "setPrice(uint256)": FunctionFragment;
+    "setMerkleRoot(bytes32)": FunctionFragment;
+    "setPremintPrice(uint256)": FunctionFragment;
     "setTresory(address)": FunctionFragment;
-    "supply()": FunctionFragment;
+    "startMintBlock()": FunctionFragment;
+    "startPrice()": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
+    "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "tresory()": FunctionFragment;
@@ -57,10 +66,18 @@ export interface ERC721ClaimableInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "baseURI", values?: undefined): string;
   encodeFunctionData(functionFragment: "claim", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "claimPrice",
+    functionFragment: "claimBatch",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "claimReserved",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "endMintBlock",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "claimers", values: [string]): string;
+  encodeFunctionData(functionFragment: "endPrice", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getApproved",
     values: [BigNumberish]
@@ -70,18 +87,41 @@ export interface ERC721ClaimableInterface extends utils.Interface {
     values: [string, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "mintBatch",
-    values: [BigNumberish]
+    functionFragment: "maxPremint",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "merkleRoot",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
-  encodeFunctionData(functionFragment: "nextClaim", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "preClaim",
+    values: [BytesLike[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "premintEndBlock",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "premintPrice",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "premintStartBlock",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "reservedAmount",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -89,20 +129,27 @@ export interface ERC721ClaimableInterface extends utils.Interface {
     values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "saleOffers",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
     functionFragment: "setApprovalForAll",
     values: [string, boolean]
   ): string;
   encodeFunctionData(functionFragment: "setBaseURI", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "setPrice",
+    functionFragment: "setMerkleRoot",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setPremintPrice",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "setTresory", values: [string]): string;
-  encodeFunctionData(functionFragment: "supply", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "startMintBlock",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "startPrice",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
@@ -111,6 +158,10 @@ export interface ERC721ClaimableInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "tokenURI",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "totalSupply",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "transferFrom",
@@ -126,8 +177,16 @@ export interface ERC721ClaimableInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "baseURI", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "claimPrice", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "claimers", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "claimBatch", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "claimReserved",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "endMintBlock",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "endPrice", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
@@ -136,34 +195,65 @@ export interface ERC721ClaimableInterface extends utils.Interface {
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "mintBatch", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "maxPremint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "merkleRoot", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "nextClaim", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "preClaim", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "premintEndBlock",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "premintPrice",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "premintStartBlock",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "reservedAmount",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "safeTransferFrom",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "saleOffers", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setApprovalForAll",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setBaseURI", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "setPrice", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setMerkleRoot",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setPremintPrice",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "setTresory", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "supply", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "startMintBlock",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "startPrice", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "totalSupply",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "transferFrom",
     data: BytesLike
@@ -257,9 +347,20 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    claimPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
+    claimBatch(
+      numberOfClaims: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
-    claimers(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
+    claimReserved(
+      from: BigNumberish,
+      to: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    endMintBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    endPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getApproved(
       tokenId: BigNumberish,
@@ -272,14 +373,11 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    mintBatch(
-      totalSupply: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    maxPremint(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    merkleRoot(overrides?: CallOverrides): Promise<[string]>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
-
-    nextClaim(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -288,9 +386,22 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    preClaim(
+      merkleProof: BytesLike[],
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    premintEndBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    premintPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    premintStartBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    reservedAmount(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -303,14 +414,9 @@ export interface ERC721Claimable extends BaseContract {
       from: string,
       to: string,
       tokenId: BigNumberish,
-      _data: BytesLike,
+      data: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    saleOffers(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
 
     setApprovalForAll(
       operator: string,
@@ -323,8 +429,13 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setPrice(
-      price: BigNumberish,
+    setMerkleRoot(
+      _merkleRoot: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setPremintPrice(
+      _premintPrice: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -333,7 +444,9 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    supply(overrides?: CallOverrides): Promise<[BigNumber]>;
+    startMintBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    startPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     supportsInterface(
       interfaceId: BytesLike,
@@ -346,6 +459,8 @@ export interface ERC721Claimable extends BaseContract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     transferFrom(
       from: string,
@@ -376,9 +491,20 @@ export interface ERC721Claimable extends BaseContract {
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  claimPrice(overrides?: CallOverrides): Promise<BigNumber>;
+  claimBatch(
+    numberOfClaims: BigNumberish,
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
-  claimers(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+  claimReserved(
+    from: BigNumberish,
+    to: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  endMintBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
+  endPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
   getApproved(
     tokenId: BigNumberish,
@@ -391,22 +517,32 @@ export interface ERC721Claimable extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  mintBatch(
-    totalSupply: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  maxPremint(overrides?: CallOverrides): Promise<BigNumber>;
+
+  merkleRoot(overrides?: CallOverrides): Promise<string>;
 
   name(overrides?: CallOverrides): Promise<string>;
-
-  nextClaim(overrides?: CallOverrides): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
+  preClaim(
+    merkleProof: BytesLike[],
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  premintEndBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
+  premintPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
+  premintStartBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  reservedAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
   "safeTransferFrom(address,address,uint256)"(
     from: string,
@@ -419,11 +555,9 @@ export interface ERC721Claimable extends BaseContract {
     from: string,
     to: string,
     tokenId: BigNumberish,
-    _data: BytesLike,
+    data: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  saleOffers(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
   setApprovalForAll(
     operator: string,
@@ -436,8 +570,13 @@ export interface ERC721Claimable extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setPrice(
-    price: BigNumberish,
+  setMerkleRoot(
+    _merkleRoot: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setPremintPrice(
+    _premintPrice: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -446,7 +585,9 @@ export interface ERC721Claimable extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  supply(overrides?: CallOverrides): Promise<BigNumber>;
+  startMintBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
+  startPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
   supportsInterface(
     interfaceId: BytesLike,
@@ -456,6 +597,8 @@ export interface ERC721Claimable extends BaseContract {
   symbol(overrides?: CallOverrides): Promise<string>;
 
   tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   transferFrom(
     from: string,
@@ -484,9 +627,20 @@ export interface ERC721Claimable extends BaseContract {
 
     claim(overrides?: CallOverrides): Promise<void>;
 
-    claimPrice(overrides?: CallOverrides): Promise<BigNumber>;
+    claimBatch(
+      numberOfClaims: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
-    claimers(arg0: string, overrides?: CallOverrides): Promise<boolean>;
+    claimReserved(
+      from: BigNumberish,
+      to: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    endMintBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
+    endPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     getApproved(
       tokenId: BigNumberish,
@@ -499,20 +653,30 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    mintBatch(
-      totalSupply: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    maxPremint(overrides?: CallOverrides): Promise<BigNumber>;
+
+    merkleRoot(overrides?: CallOverrides): Promise<string>;
 
     name(overrides?: CallOverrides): Promise<string>;
-
-    nextClaim(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
+    preClaim(
+      merkleProof: BytesLike[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    premintEndBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
+    premintPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
+    premintStartBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    reservedAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -525,14 +689,9 @@ export interface ERC721Claimable extends BaseContract {
       from: string,
       to: string,
       tokenId: BigNumberish,
-      _data: BytesLike,
+      data: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    saleOffers(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     setApprovalForAll(
       operator: string,
@@ -542,11 +701,21 @@ export interface ERC721Claimable extends BaseContract {
 
     setBaseURI(newBaseURI: string, overrides?: CallOverrides): Promise<void>;
 
-    setPrice(price: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    setMerkleRoot(
+      _merkleRoot: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setPremintPrice(
+      _premintPrice: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setTresory(newTresory: string, overrides?: CallOverrides): Promise<void>;
 
-    supply(overrides?: CallOverrides): Promise<BigNumber>;
+    startMintBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
+    startPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     supportsInterface(
       interfaceId: BytesLike,
@@ -556,6 +725,8 @@ export interface ERC721Claimable extends BaseContract {
     symbol(overrides?: CallOverrides): Promise<string>;
 
     tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferFrom(
       from: string,
@@ -631,9 +802,20 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    claimPrice(overrides?: CallOverrides): Promise<BigNumber>;
+    claimBatch(
+      numberOfClaims: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
-    claimers(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+    claimReserved(
+      from: BigNumberish,
+      to: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    endMintBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
+    endPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     getApproved(
       tokenId: BigNumberish,
@@ -646,14 +828,11 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    mintBatch(
-      totalSupply: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    maxPremint(overrides?: CallOverrides): Promise<BigNumber>;
+
+    merkleRoot(overrides?: CallOverrides): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
-
-    nextClaim(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -662,9 +841,22 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    preClaim(
+      merkleProof: BytesLike[],
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    premintEndBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
+    premintPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
+    premintStartBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    reservedAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -677,13 +869,8 @@ export interface ERC721Claimable extends BaseContract {
       from: string,
       to: string,
       tokenId: BigNumberish,
-      _data: BytesLike,
+      data: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    saleOffers(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     setApprovalForAll(
@@ -697,8 +884,13 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setPrice(
-      price: BigNumberish,
+    setMerkleRoot(
+      _merkleRoot: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setPremintPrice(
+      _premintPrice: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -707,7 +899,9 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    supply(overrides?: CallOverrides): Promise<BigNumber>;
+    startMintBlock(overrides?: CallOverrides): Promise<BigNumber>;
+
+    startPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     supportsInterface(
       interfaceId: BytesLike,
@@ -720,6 +914,8 @@ export interface ERC721Claimable extends BaseContract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transferFrom(
       from: string,
@@ -754,12 +950,20 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    claimPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    claimers(
-      arg0: string,
-      overrides?: CallOverrides
+    claimBatch(
+      numberOfClaims: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    claimReserved(
+      from: BigNumberish,
+      to: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    endMintBlock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    endPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getApproved(
       tokenId: BigNumberish,
@@ -772,14 +976,11 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    mintBatch(
-      totalSupply: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
+    maxPremint(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    merkleRoot(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    nextClaim(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -788,9 +989,22 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    preClaim(
+      merkleProof: BytesLike[],
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    premintEndBlock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    premintPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    premintStartBlock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
+
+    reservedAmount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "safeTransferFrom(address,address,uint256)"(
       from: string,
@@ -803,13 +1017,8 @@ export interface ERC721Claimable extends BaseContract {
       from: string,
       to: string,
       tokenId: BigNumberish,
-      _data: BytesLike,
+      data: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    saleOffers(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     setApprovalForAll(
@@ -823,8 +1032,13 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setPrice(
-      price: BigNumberish,
+    setMerkleRoot(
+      _merkleRoot: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setPremintPrice(
+      _premintPrice: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -833,7 +1047,9 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    supply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    startMintBlock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    startPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     supportsInterface(
       interfaceId: BytesLike,
@@ -846,6 +1062,8 @@ export interface ERC721Claimable extends BaseContract {
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transferFrom(
       from: string,

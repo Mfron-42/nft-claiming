@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@nomiclabs/buidler": "^1.4.8",
-    "dotenv": "^10.0.0"
+    "dotenv": "^10.0.0",
+    "merkletreejs": "^0.2.32"
   }
 }
