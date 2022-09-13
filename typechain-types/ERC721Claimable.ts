@@ -23,22 +23,24 @@ export interface ERC721ClaimableInterface extends utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "baseURI()": FunctionFragment;
-    "claim()": FunctionFragment;
-    "claimBatch(uint16)": FunctionFragment;
     "claimReserved(uint256,uint256)": FunctionFragment;
-    "endMintBlock()": FunctionFragment;
+    "endPremintTimestamp()": FunctionFragment;
     "endPrice()": FunctionFragment;
+    "freeAmount()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
+    "getPrice(uint256)": FunctionFragment;
+    "getPrices(uint256,uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "maxPremint()": FunctionFragment;
     "merkleRoot()": FunctionFragment;
+    "mint(uint256)": FunctionFragment;
+    "mintCount(address)": FunctionFragment;
     "name()": FunctionFragment;
+    "nextClaim()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
-    "preClaim(bytes32[])": FunctionFragment;
-    "premintEndBlock()": FunctionFragment;
+    "preMint(uint256,bytes32[])": FunctionFragment;
+    "premintCount(address)": FunctionFragment;
     "premintPrice()": FunctionFragment;
-    "premintStartBlock()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "reservedAmount()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
@@ -47,7 +49,8 @@ export interface ERC721ClaimableInterface extends utils.Interface {
     "setMerkleRoot(bytes32)": FunctionFragment;
     "setPremintPrice(uint256)": FunctionFragment;
     "setTresory(address)": FunctionFragment;
-    "startMintBlock()": FunctionFragment;
+    "startMintTimestamp()": FunctionFragment;
+    "startPremintTimestamp()": FunctionFragment;
     "startPrice()": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
@@ -64,56 +67,58 @@ export interface ERC721ClaimableInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(functionFragment: "baseURI", values?: undefined): string;
-  encodeFunctionData(functionFragment: "claim", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "claimBatch",
-    values: [BigNumberish]
-  ): string;
   encodeFunctionData(
     functionFragment: "claimReserved",
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "endMintBlock",
+    functionFragment: "endPremintTimestamp",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "endPrice", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "freeAmount",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getApproved",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPrice",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPrices",
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [string, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "maxPremint",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "merkleRoot",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "mint", values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: "mintCount", values: [string]): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(functionFragment: "nextClaim", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "preClaim",
-    values: [BytesLike[]]
+    functionFragment: "preMint",
+    values: [BigNumberish, BytesLike[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "premintEndBlock",
-    values?: undefined
+    functionFragment: "premintCount",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "premintPrice",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "premintStartBlock",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -143,7 +148,11 @@ export interface ERC721ClaimableInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "setTresory", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "startMintBlock",
+    functionFragment: "startMintTimestamp",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "startPremintTimestamp",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -176,41 +185,40 @@ export interface ERC721ClaimableInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "baseURI", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "claimBatch", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "claimReserved",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "endMintBlock",
+    functionFragment: "endPremintTimestamp",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "endPrice", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "freeAmount", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getPrice", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getPrices", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "maxPremint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "merkleRoot", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mintCount", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "nextClaim", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "preClaim", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "preMint", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "premintEndBlock",
+    functionFragment: "premintCount",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "premintPrice",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "premintStartBlock",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -240,7 +248,11 @@ export interface ERC721ClaimableInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "setTresory", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "startMintBlock",
+    functionFragment: "startMintTimestamp",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "startPremintTimestamp",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "startPrice", data: BytesLike): Result;
@@ -343,29 +355,33 @@ export interface ERC721Claimable extends BaseContract {
 
     baseURI(overrides?: CallOverrides): Promise<[string]>;
 
-    claim(
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    claimBatch(
-      numberOfClaims: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     claimReserved(
       from: BigNumberish,
-      to: BigNumberish,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    endMintBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
+    endPremintTimestamp(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     endPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    freeAmount(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    getPrice(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getPrices(
+      fromId: BigNumberish,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber] & { prices: BigNumber }>;
 
     isApprovedForAll(
       owner: string,
@@ -373,11 +389,18 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    maxPremint(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     merkleRoot(overrides?: CallOverrides): Promise<[string]>;
 
+    mint(
+      amount: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    mintCount(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
+
     name(overrides?: CallOverrides): Promise<[string]>;
+
+    nextClaim(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -386,16 +409,15 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    preClaim(
+    preMint(
+      amount: BigNumberish,
       merkleProof: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    premintEndBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
+    premintCount(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     premintPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    premintStartBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -444,7 +466,9 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    startMintBlock(overrides?: CallOverrides): Promise<[BigNumber]>;
+    startMintTimestamp(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    startPremintTimestamp(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     startPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -487,29 +511,33 @@ export interface ERC721Claimable extends BaseContract {
 
   baseURI(overrides?: CallOverrides): Promise<string>;
 
-  claim(
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  claimBatch(
-    numberOfClaims: BigNumberish,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   claimReserved(
     from: BigNumberish,
-    to: BigNumberish,
+    amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  endMintBlock(overrides?: CallOverrides): Promise<BigNumber>;
+  endPremintTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
   endPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
+  freeAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
   getApproved(
     tokenId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  getPrice(
+    tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getPrices(
+    fromId: BigNumberish,
+    amount: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
   isApprovedForAll(
     owner: string,
@@ -517,26 +545,32 @@ export interface ERC721Claimable extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  maxPremint(overrides?: CallOverrides): Promise<BigNumber>;
-
   merkleRoot(overrides?: CallOverrides): Promise<string>;
 
+  mint(
+    amount: BigNumberish,
+    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  mintCount(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
   name(overrides?: CallOverrides): Promise<string>;
+
+  nextClaim(overrides?: CallOverrides): Promise<BigNumber>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-  preClaim(
+  preMint(
+    amount: BigNumberish,
     merkleProof: BytesLike[],
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  premintEndBlock(overrides?: CallOverrides): Promise<BigNumber>;
+  premintCount(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   premintPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-  premintStartBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -585,7 +619,9 @@ export interface ERC721Claimable extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  startMintBlock(overrides?: CallOverrides): Promise<BigNumber>;
+  startMintTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
+
+  startPremintTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
   startPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -625,27 +661,33 @@ export interface ERC721Claimable extends BaseContract {
 
     baseURI(overrides?: CallOverrides): Promise<string>;
 
-    claim(overrides?: CallOverrides): Promise<void>;
-
-    claimBatch(
-      numberOfClaims: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     claimReserved(
       from: BigNumberish,
-      to: BigNumberish,
+      amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    endMintBlock(overrides?: CallOverrides): Promise<BigNumber>;
+    endPremintTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
     endPrice(overrides?: CallOverrides): Promise<BigNumber>;
+
+    freeAmount(overrides?: CallOverrides): Promise<BigNumber>;
 
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    getPrice(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPrices(
+      fromId: BigNumberish,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     isApprovedForAll(
       owner: string,
@@ -653,26 +695,29 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    maxPremint(overrides?: CallOverrides): Promise<BigNumber>;
-
     merkleRoot(overrides?: CallOverrides): Promise<string>;
 
+    mint(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    mintCount(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
     name(overrides?: CallOverrides): Promise<string>;
+
+    nextClaim(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-    preClaim(
+    preMint(
+      amount: BigNumberish,
       merkleProof: BytesLike[],
       overrides?: CallOverrides
     ): Promise<void>;
 
-    premintEndBlock(overrides?: CallOverrides): Promise<BigNumber>;
+    premintCount(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     premintPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-    premintStartBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -713,7 +758,9 @@ export interface ERC721Claimable extends BaseContract {
 
     setTresory(newTresory: string, overrides?: CallOverrides): Promise<void>;
 
-    startMintBlock(overrides?: CallOverrides): Promise<BigNumber>;
+    startMintTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
+
+    startPremintTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
     startPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -798,27 +845,31 @@ export interface ERC721Claimable extends BaseContract {
 
     baseURI(overrides?: CallOverrides): Promise<BigNumber>;
 
-    claim(
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    claimBatch(
-      numberOfClaims: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     claimReserved(
       from: BigNumberish,
-      to: BigNumberish,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    endMintBlock(overrides?: CallOverrides): Promise<BigNumber>;
+    endPremintTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
     endPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
+    freeAmount(overrides?: CallOverrides): Promise<BigNumber>;
+
     getApproved(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPrice(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPrices(
+      fromId: BigNumberish,
+      amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -828,11 +879,18 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    maxPremint(overrides?: CallOverrides): Promise<BigNumber>;
-
     merkleRoot(overrides?: CallOverrides): Promise<BigNumber>;
 
+    mint(
+      amount: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    mintCount(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
     name(overrides?: CallOverrides): Promise<BigNumber>;
+
+    nextClaim(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -841,16 +899,15 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    preClaim(
+    preMint(
+      amount: BigNumberish,
       merkleProof: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    premintEndBlock(overrides?: CallOverrides): Promise<BigNumber>;
+    premintCount(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     premintPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-    premintStartBlock(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -899,7 +956,9 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    startMintBlock(overrides?: CallOverrides): Promise<BigNumber>;
+    startMintTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
+
+    startPremintTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
     startPrice(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -946,27 +1005,33 @@ export interface ERC721Claimable extends BaseContract {
 
     baseURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    claim(
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    claimBatch(
-      numberOfClaims: BigNumberish,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     claimReserved(
       from: BigNumberish,
-      to: BigNumberish,
+      amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    endMintBlock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    endPremintTimestamp(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     endPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    freeAmount(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getApproved(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPrice(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPrices(
+      fromId: BigNumberish,
+      amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -976,11 +1041,21 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    maxPremint(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     merkleRoot(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    mint(
+      amount: BigNumberish,
+      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    mintCount(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    nextClaim(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -989,16 +1064,18 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    preClaim(
+    preMint(
+      amount: BigNumberish,
       merkleProof: BytesLike[],
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    premintEndBlock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    premintCount(
+      arg0: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     premintPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    premintStartBlock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -1047,7 +1124,13 @@ export interface ERC721Claimable extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    startMintBlock(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    startMintTimestamp(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    startPremintTimestamp(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     startPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

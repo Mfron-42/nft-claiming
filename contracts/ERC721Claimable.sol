@@ -7,96 +7,109 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
 contract ERC721Claimable is ERC721, Ownable {
+    uint16 constant maxPremint = 15;
+    uint16  constant maxMint = 40;
 
-    uint256 public premintStartBlock;
-    uint256 public premintEndBlock;
-    uint256 public maxPremint;
+    uint256 public freeAmount;
+
+
     uint256 public premintPrice;
 
-
-    uint256 public startMintBlock;
-    uint256 public endMintBlock;
+    uint256 public startMintTimestamp;
+    uint256 public startPremintTimestamp;
+    uint256 public endPremintTimestamp;
 
     uint256 public startPrice;
     uint256 public endPrice;
 
     uint256 public reservedAmount;
     uint256 public totalSupply;
-    uint256 private nextClaim;
+    uint256 public nextClaim;
     address public tresory;
     string public baseURI;
     bytes32 public merkleRoot;
+    mapping (address=>uint256) public premintCount;
+    mapping (address=>uint256) public mintCount;
 
     constructor(
     string memory _name,
     string memory _symbol,
     uint256 _totalSupply,
-    uint256 _premintStartBlock,
-    uint256 _premintEndBlock,
-    uint256 _maxPremint,
-    uint256 _startMintBlock,
-    uint256 _endMintBlock,
+    uint256 _freeAmount,
+    uint256 _premintPrice,
+    uint256 _startPremintTimestamp,
+    uint256 _startMintTimestamp,
     uint256 _startPrice,
     uint256 _endPrice,
     uint256 _reservedAmount
     )
         ERC721(_name, _symbol)
     {
-        premintStartBlock = _premintStartBlock;
-        premintEndBlock = _premintEndBlock;
-        maxPremint = _maxPremint;
-        startMintBlock = _startMintBlock;
-        endMintBlock = _endMintBlock;
+        totalSupply = _totalSupply;
+        freeAmount = _freeAmount;
+        premintPrice = _premintPrice;
+        startPremintTimestamp = _startPremintTimestamp;
+        startMintTimestamp = _startMintTimestamp;
         startPrice = _startPrice;
         endPrice = _endPrice;
         reservedAmount = _reservedAmount;
-        totalSupply = _totalSupply;
-        uint256 supply = 0;
         nextClaim = reservedAmount;
-        while(supply < _totalSupply){
-            _mint(address(this), supply);
-            supply++;
-        }
+        endPremintTimestamp = startMintTimestamp;
     }
 
 
-    modifier premintCheck(bytes32[] calldata merkleProof) {
-        bytes32 leaf = keccak256(abi.encodePacked(msg.sender)); 
+    modifier premintCheck(uint256 amount, bytes32[] calldata merkleProof) {
+        bytes32 leaf = keccak256(abi.encodePacked(msg.sender));
+        require(nextClaim + amount < totalSupply, "Collection overflow");
         require(MerkleProof.verify(merkleProof, merkleRoot, leaf), "Invalid proof");
-        require(block.number > premintStartBlock, "Too early to premint");
-        require(block.number < premintEndBlock, "Too late to premint");
-        require(nextClaim < maxPremint, "Too much premint");
+        require(premintCount[msg.sender] + amount <= maxPremint, "Too much premint");
+        require(block.timestamp > startPremintTimestamp, "Too early to premint");
+        require(block.timestamp < endPremintTimestamp, "Too late to premint");
         _;
     }
 
-    modifier mintCheck() {
-        require(block.number > startMintBlock, "Too early to premint");
-        require(block.number < endMintBlock, "Too late to premint");
+    modifier mintCheck(uint256 amount) {
+        require(nextClaim + amount < totalSupply, "Collection overflow");
+        require(block.timestamp > startMintTimestamp, "Too early to mint");
+        require(mintCount[msg.sender] + amount <= maxMint, "Too much mint");
         _;
     }
 
-    function claimBatch(uint16 numberOfClaims) public mintCheck payable {
-        for(uint16 i = 0; i < numberOfClaims; i++){
-            claim();
+    function getPrices(uint256 fromId, uint256 amount) public view  returns (uint256 prices){
+        for (uint256 i = 0; i < amount; i++){
+            prices += getPrice(fromId +  i);
         }
+        return prices;
     }
 
-    function claim() public mintCheck payable {
-        uint256 mintPrice = startPrice + (((endPrice - startPrice) / (totalSupply - reservedAmount)) * (nextClaim - reservedAmount));
-        require(msg.value >= mintPrice, "Price incorrect");
+    function getPrice(uint256 tokenId) public view  returns (uint256){
+        if (tokenId < (reservedAmount + freeAmount))
+            return 0;
+        return startPrice + (((endPrice - startPrice) / (totalSupply - reservedAmount)) * (tokenId - reservedAmount));
+    }
+
+    function mint(uint256 amount) public mintCheck(amount) payable {
+        uint256 prices = getPrices(nextClaim, amount);
+        require(msg.value >= prices, "Price incorrect");
+        for (uint256 i = 0; i < amount; i++){
+            _mint(msg.sender, nextClaim + i);
+        }
         address payable payableTresory = payable(tresory);
+        mintCount[msg.sender] += amount;
+        nextClaim += amount;
         payableTresory.transfer(msg.value);
-        _safeTransfer(address(this), msg.sender, nextClaim, "");
-        nextClaim++;
     }
 
-    function preClaim(bytes32[] calldata merkleProof) public premintCheck(merkleProof) payable {
-        uint256 mintPrice = premintPrice;
-        require(msg.value >= mintPrice, "Price incorrect");
+    function preMint(uint256 amount, bytes32[] calldata merkleProof) public premintCheck(amount, merkleProof) payable {
+        uint256 prices = amount * premintPrice;
+        require(msg.value >= prices, "Price incorrect");
+        for (uint256 i = 0; i < amount; i++){
+            _mint(msg.sender, nextClaim + i);
+        }
         address payable payableTresory = payable(tresory);
-        payableTresory.transfer(mintPrice);
-        _safeTransfer(address(this), msg.sender, nextClaim, "");
-        nextClaim++;
+        premintCount[msg.sender] += amount;
+        nextClaim += amount;
+        payableTresory.transfer(msg.value);
     }
 
     function _baseURI() internal view virtual override returns (string memory) {
@@ -123,13 +136,13 @@ contract ERC721Claimable is ERC721, Ownable {
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
         string memory base = _baseURI();
-        return string(abi.encodePacked(base, Strings.toString(tokenId), ".json"));
+        return string(abi.encodePacked(base, Strings.toString(tokenId)));
     }
 
-    function claimReserved(uint256 from, uint256 to) public onlyOwner {
-        require(to < reservedAmount, "Not reserved");
-        for(uint256 i = from; i < to; i++){
-            _safeTransfer(address(this), msg.sender, i, "");
+    function claimReserved(uint256 from, uint256 amount) public onlyOwner {
+        require(from + amount <= reservedAmount, "Not reserved");
+        for(uint256 i = 0; i < amount; i++){
+            _mint(msg.sender, from + i);
         }
     }
 }
